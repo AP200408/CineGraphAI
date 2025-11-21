@@ -1,0 +1,164 @@
+/* Chatbot.css — Fixed-height app; chat-history scrolls when overflowing */
+
+/* Base + full viewport */
+:root {
+  --header-h: 72px;      /* adjust header height here if needed */
+  --page-padding: 18px;
+  --max-width: 1400px;
+}
+
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  background: radial-gradient(1200px 800px at 10% 10%, rgba(45,60,90,0.18), transparent 8%),
+              linear-gradient(180deg, #081123 0%, #020617 100%);
+  color: #e6eef8;
+  font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
+}
+
+/* Root wrapper — fixed to viewport height */
+.chatbot-root {
+  height: 100vh;                 /* critical: entire app fills viewport */
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: var(--page-padding);
+  box-sizing: border-box;
+}
+
+/* Top header across the page (fixed height) */
+.app-header {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 22px;
+  box-sizing: border-box;
+  border-radius: 12px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+  box-shadow: 0 10px 30px rgba(2,6,23,0.6);
+  flex: 0 0 var(--header-h);     /* header has fixed height and does not grow */
+  height: var(--header-h);
+}
+
+/* header columns */
+.header-left { display:flex; align-items:center; gap:12px; min-width: 120px; }
+.header-center { text-align: center; flex: 1 1 auto; }
+.header-right { display:flex; align-items:center; gap:10px; min-width: 170px; justify-content:flex-end; }
+
+/* main container under the header — fills remaining viewport */
+.chatbot-container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  box-sizing: border-box;
+  flex: 1 1 0;                /* take remaining vertical space */
+  display: flex;
+  flex-direction: column;
+  padding: 8px 18px 22px;
+  min-height: 0;             /* important for correct flex behavior */
+}
+
+/* Card that contains chat — occupies all available height in container */
+.chatbot-card.full-width {
+  width: 100%;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.03));
+  border-radius: 12px;
+  box-shadow: 0 18px 40px rgba(2,6,23,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+  padding: 18px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1 1 0;               /* stretch to fill the .chatbot-container */
+  min-height: 0;             /* crucial: allows children to overflow properly */
+  overflow: hidden;          /* prevent the card itself from growing; child will scroll */
+}
+
+/* Chat main area uses full height of the card */
+.chat-main.full-width {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1 1 0;
+  min-height: 0;             /* ensure children can compute overflow */
+}
+
+/* Chat history: the *only* element allowed to scroll */
+.chat-history.full-width {
+  flex: 1 1 0;               /* take remaining space above the input */
+  min-height: 0;             /* allow internal scrolling */
+  padding: 18px;
+  border-radius: 10px;
+  overflow-y: auto;          /* vertical scroll for overflow */
+  overflow-x: hidden;
+  background: linear-gradient(180deg, rgba(255,255,255,0.006), rgba(0,0,0,0.01));
+  box-shadow: 0 6px 18px rgba(3,10,25,0.5);
+  word-wrap: break-word;
+  white-space: pre-wrap;     /* keeps line breaks but wraps long text */
+}
+
+/* visible subtle scrollbar */
+.chat-history.full-width::-webkit-scrollbar { width: 12px; }
+.chat-history.full-width::-webkit-scrollbar-track { background: transparent; }
+.chat-history.full-width::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.03));
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+/* Welcome */
+.welcome { color: rgba(230,238,248,0.9); padding: 10px; }
+
+/* Message styling (unchanged) */
+.chat-message { display:flex; gap:12px; margin-bottom:12px; align-items:flex-start; animation: appear .12s ease; }
+.avatar { width:44px; height:44px; min-width:44px; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)); color:#071033; font-weight:700; box-shadow:0 4px 12px rgba(2,6,23,0.5); }
+.chat-bubble { max-width: 88%; padding: 12px 16px; border-radius: 14px; font-size: 0.98rem; line-height: 1.45; box-shadow: 0 6px 18px rgba(3,10,25,0.45); white-space: pre-wrap; word-break: break-word; }
+
+/* user (right) */
+.chat-message.user { justify-content: flex-end; }
+.chat-message.user .chat-bubble { background: linear-gradient(135deg, #2563eb, #7c3aed); color: white; border-bottom-right-radius: 6px; }
+
+/* bot (left) */
+.chat-message.bot { justify-content: flex-start; }
+.chat-message.bot .chat-bubble { background: rgba(255,255,255,0.02); color: #e6eef8; border-bottom-left-radius: 6px; }
+
+/* Input area pinned under chat, does not grow */
+.chat-input-area.full-width {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+  padding-top: 6px;
+  flex: 0 0 auto;            /* fixed: won't stretch the card */
+}
+
+/* Input */
+.chat-input { flex: 1 1 auto; min-height: 56px; max-height: 160px; resize: none; padding: 12px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.04); background: rgba(255,255,255,0.02); color: #e6eef8; font-size: 0.98rem; outline: none; transition: box-shadow 0.16s ease, border-color 0.16s ease; }
+.chat-input:focus { box-shadow: 0 10px 30px rgba(37,99,235,0.12); border-color: rgba(37,99,235,0.6); }
+
+/* Send button */
+.chat-send-button { border: none; padding: 12px 18px; border-radius: 12px; min-width: 110px; font-weight: 700; cursor: pointer; background: linear-gradient(90deg, #7c3aed, #2563eb); color: #fff; box-shadow: 0 12px 36px rgba(37,99,235,0.18); }
+.chat-send-button:hover:not(:disabled) { transform: translateY(-3px); }
+.chat-send-button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+/* animation */
+@keyframes appear { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+/* responsive tweaks */
+@media (max-width: 980px) {
+  :root { --header-h: 64px; }
+  .header-center { display: none; }
+  .chatbot-root { padding: 12px; }
+  .app-header { padding: 10px 14px; }
+  .chatbot-container { padding: 8px 12px 16px; }
+  .chatbot-card.full-width { padding: 12px; }
+  .avatar { width: 36px; height: 36px; min-width: 36px; }
+  .chat-input { min-height: 48px; }
+}

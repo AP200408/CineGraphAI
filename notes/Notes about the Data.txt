@@ -1,0 +1,200 @@
+1. Movie Data: (2153 movies and text fragments for 32114 characters in total)
+1.1. Movie Character Data 
+	movie_character_texts/
+    		<movie_name>_<imdb_id>/
+        		<character_name>_text.txt
+        		...
+
+	i)k) <label>: <data> # i = screenplay segment(divided into segments, each segment can include one or more scenes.), k = scene number(Each scene groups together dialogue and text relevant to that part of the story.), <label> = dialog or text
+	
+	Use:
+		Character-level dialogue corpus.
+		Build character emotion arcs, personality profiling, interaction graphs.
+		Enables who-said-what mapping.
+
+1.2. character_genders.pickle: (84369 movie imdb ids)
+	{
+  		<movie_imdb_id>: [
+      			[<character_name>, <character_type>], ...
+  		]
+	}
+
+	Use:
+		Analyze gender distribution in dialogues.
+		Study representation (speaking time, emotions by gender).
+		Add gender nodes/attributes to graph.
+
+2. Screenplay Data
+2.1. Bert_annotations/<movie_name>_<imdb_id>_anno.txt (The annotation system (built on ScreenPy + BERT models) tries to classify each line of the raw script into categories with labels (dialog, scene_heading, speaker_heading, text).)
+	Use:
+		Machine-labeled script annotations.
+		Helpful for weak supervision or training.
+
+2.2. manual_annotations/<movie_name>_<imdb_id>_manual_anno.txt -> <label>: <data> (Manual annotations)
+	Use:
+		Gold standard annotations (human-labeled).
+
+2.3. raw_texts/<movie_name>_<imdb_id>.txt (Raw screenplay text.)
+	Use:
+		Primary input for all analysis.
+		Needed for reprocessing with custom NLP pipelines.
+
+2.4. raw_text_lemmas/<movie_name>_<imdb_id>_lemmas.txt (Lemmatized script of raw text, space-separated words.)
+	Use:
+		Ideal for topic modeling, embeddings, keyword extraction.
+		Useful for semantic search.
+
+2.5. rule_based_annotations/<movie_name>_<imdb_id>.json (JSON hierarchy → segments/scenes → dicts.) one JSON file per movie.
+	Example types:
+		Scene Headings
+			head_type: "heading"
+			Contains scene metadata: interior/exterior (terior), location, time of day (ToD), shot type.
+			Example: "INT. NEW YORK CITY – DAY"
+		Speakers / Titles
+			head_type: "speaker/title"
+			Defines who is speaking.
+			Example: "JOHN"
+		Dialogues / Text
+			head_type: "text"
+			Descriptive or action lines.
+			Example: "He sits by the window, staring at the rain."
+		Transitions
+			head_type: "transition"
+			Marks cinematic transitions like "CUT TO:", "DISSOLVE TO:".
+	Use:
+		Structural parsing of scripts.
+		Alternative to BERT/manual annotations.
+		Links text → screenplay structure (scene/transition/dialogue).
+
+3. Movies Metadata: Contains info about each movie(complements sceenplays and annotations by providing contextual, production, and review data.)
+
+3.1. Metacritic Reviews cut versions(csv)
+	a. Contains Review(text), score, imdb id.
+	b. Number of reviews: 21,024 and Number of unique movies with reviews: 2,038
+
+3.2. Movie meta data(csv): Contains metadata like 
+	1. imdbid
+[text]	2. title
+[list]	3. akas: Titles in different languages
+[int]	4. year: Launch year
+[int]	5. metascore: Score from metacritic [-1, 100]
+[int]	6. imdb user rating: Rating from imdb [-1, 9]
+[int]	7. number of imdb user votes: from imdb.com
+[text]	8. awards: Movie awards
+[dict]	9. opening weekend (how much money made in the first weekend and date)
+[list]	10. producers
+[int]	11. budget
+[list]	12. script department
+[list]	13. production companies
+[list]	14. writers
+[list]	15. directors
+[list]	16. casting directors
+[list]	17. cast: cast info
+[list]	18. countries: countries involved in production
+[dict]	19. age restrict
+[text]	20. plot
+[text]	21. plot outline (with outline)
+[list]	22. keywords
+[list]	23. genres
+[list]	24. taglines: Taglines of the movie
+[text]	25. synopsis: critics' synopsis/summary
+
+3.2 Screenplay Awards(csv): (- is No, + is Yes) for  462 movies
+	1. Movie
+	2. Academy Awards adapted screenplay
+	3. Academy Awards original screenplay
+	4. BAFTA nominations
+	5. Golden Globe Award for Best Screenplay
+	6. Writers Guild Awards Winners & Nominees 2020-2013
+
+
+So, the corpus is:
+	Scripts (raw_texts, raw_text_lemmas).
+	Annotations (BERT_annotations, manual_annotations, rule_based_annotations).
+	Character fragments (movie_character_texts, character_genders).
+	Reviews & structured metadata (movies_metadata).
+
+Idea is: turning long, unstructured scripts into a knowledge base with smart tags.
+
+1. Map how characters are linked to dialogues. We need a data dictionary
+2. Metadata schema: (to store in neo4j(graph), postgres(structured), chroma(semantic emb.))
+	Movie: title, year, genre, budget, awards.
+	Character: name, gender, role.
+	Dialogue: text, sentiment, emotion, keywords, named entities.
+	Scene: time stamp / segment, location.
+	Review: critic rating, audience sentiment.
+3. Preprocessing Pipeline
+	Text Cleaning: Normalize scripts (remove formatting, unify casing, tokenize).
+	Scene Segmentation: Use scene_heading and annotations.
+	Speaker Linking: Map dialogues to characters (from speaker_heading and character files).
+	Embeddings: Encode dialogues & scenes into vectors
+4. Metadata extraction
+	Topics & Keywords: NLP (TF-IDF, KeyBERT, transformer models).
+	Named Entities: SpaCy / HuggingFace NER.
+	Sentiment & Emotion: Sentiment models (VADER, DistilBERT, EmoRoBERTa).
+	Speaker Identification: From script annotations + graph links.
+	Time-Based Segmentation: ???????
+	Content Classification: Classify into genres or categories using supervised ML.
+5. Store
+	Neo4j: Movies, Characters, Scenes, Reviews linked.
+	ChromaDB: Store embeddings for semantic search.
+	Postgres: Tabular metadata (ratings, budget, counts).
+
+ (more to be added)
+
+
+Nodes:
+	1. Movie: Properties: imdb_id, title, akas, year, release_date, metascore, imdb_rating, imdb_votes, budget, tagline, plot.
+
+	2. Genre: Property: name
+
+	3. Person: Property: name, role (Actor, Actress, Director, Writer, Producer, Critic, etc.)
+
+	4. Company: Property: name (Production companies, distributors)
+
+	5. Award: Properties: name, year, result (Won/Nominated)
+
+	6. Review: Properties: text, reviewer, score, sentiment, sentiment_score, emotion
+
+	7. Reviewer: Properties: text(Actual review), score(rating), name(if given), sentiment and sentiment score (both generated by a transformer based sentiment model)
+
+Relationship between the nodes (if you find more relationships from the data, let me know):
+Movie Connections
+
+	(Movie)-[:HAS_GENRE]->(Genre)
+
+	(Movie)-[:DIRECTED_BY]->(Person)
+
+	(Movie)-[:WRITTEN_BY]->(Person)
+
+	(Movie)-[:PRODUCED_BY]->(Person|Company)
+
+	(Movie)-[:CASTED]->(Person)
+
+	(Movie)-[:CASTING_DIRECTED_BY]->(Person)
+
+	(Movie)-[:SCRIPT_SUPERVISED_BY]->(Person)
+
+	(Movie)-[:WON]->(Award)
+
+	(Movie)-[:NOMINATED_FOR]->(Award)
+
+	(Movie)-[:HAS_REVIEW]->(Review)
+
+	etc.
+
+Review Connections
+
+	(Review)-[:WRITTEN_BY]->(Reviewer)
+
+	(Reviewer)-[:REVIEWS]->(Movie)
+
+Person Connections
+
+	(Person)-[:ACTED_IN]->(Movie) (Here, cast of the movie can be related)
+
+	(Person)-[:DIRECTED]->(Movie)
+
+	(Person)-[:WROTE]->(Movie)
+
+	(Person)-[:PRODUCED]->(Movie)

@@ -1,0 +1,253 @@
+/* Full chat container */
+.chatbox-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: linear-gradient(135deg, #1f2937, #111827);
+  color: #fff;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Header */
+.chat-header {
+  background: #2563eb;
+  padding: 16px 20px;
+  text-align: center;
+  border-bottom: 1px solid #1e3a8a;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.chat-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.chat-header p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #dbeafe;
+}
+
+/* Messages area */
+.messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Each message bubble */
+.message {
+  max-width: 70%;
+  padding: 12px 16px;
+  border-radius: 16px;
+  line-height: 1.5;
+  word-break: break-word;
+  font-size: 15px;
+  animation: fadeIn 0.25s ease-in;
+}
+
+/* User messages */
+.message.user {
+  background: #3b82f6;
+  color: #fff;
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);
+}
+
+/* Bot messages */
+.message.bot {
+  background: #f3f4f6;
+  color: #111827;
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* Loading indicator */
+.loading {
+  font-style: italic;
+  font-size: 14px;
+  color: #9ca3af;
+  align-self: center;
+}
+
+/* Input container */
+.input-container {
+  display: flex;
+  padding: 12px;
+  border-top: 1px solid #1e3a8a;
+  background: #1f2937;
+}
+
+/* Chat input */
+.chat-input {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+  font-size: 15px;
+  background: #374151;
+  color: #f9fafb;
+}
+
+.chat-input:focus {
+  background: #4b5563;
+}
+
+/* Send button */
+.send-btn {
+  margin-left: 10px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 8px;
+  background: #3b82f6;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.send-btn:hover {
+  background: #2563eb;
+}
+
+.send-btn:disabled {
+  background: #6b7280;
+  cursor: not-allowed;
+}
+
+/* Scrollbar styling */
+.messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+.messages::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+.messages::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* (Keep existing styles from earlier answer) */
+/* Add or append the following to ChatBox.css */
+
+
+.bot-text {
+  /* ensure markdown content wraps well */
+  font-size: 15px;
+  color: #0f172a;
+}
+
+/* render code blocks / inline code nicely */
+.bot-text pre {
+  background: #0b1220;
+  color: #e6eef8;
+  padding: 10px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 13px;
+}
+
+.bot-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.bot-text code {
+  background: rgba(15, 23, 42, 0.06);
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace;
+}
+/* feedback row sits at the bottom-right of the bot message */
+.feedback-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  align-self: flex-end;    /* push row to right inside bot bubble */
+  margin-top: 8px;
+}
+
+/* small circular thumb buttons */
+.thumb-btn {
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  font-size: 14px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 0;
+  background: rgba(255,255,255,0.08);
+  color: #0f172a;
+  cursor: pointer;
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+
+/* hover */
+.thumb-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(2,6,23,0.08);
+}
+.thumb-btn.selected.up {
+  background: linear-gradient(90deg,#16a34a,#4ade80);
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(34,197,94,0.12);
+}
+
+.thumb-btn.selected.down {
+  background: linear-gradient(90deg,#ef4444,#fb7185);
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(239,68,68,0.12);
+}
+
+.feedback-loading {
+  font-size: 12px;
+  color: #9ca3af;
+  margin-left: 6px;
+}
+
+/* toast */
+.feedback-toast {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  background: linear-gradient(90deg,#06b6d4,#3b82f6);
+  color: white;
+  padding: 10px 14px;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(11, 82, 145, 0.18);
+  z-index: 9999;
+  font-weight: 600;
+  animation: toast-in 0.18s ease;
+}
+
+@keyframes toast-in {
+  from { transform: translateY(6px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}

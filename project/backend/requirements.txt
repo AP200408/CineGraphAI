@@ -1,0 +1,32 @@
+# Core deep learning stack
+torch==2.3.1+cu118
+torchvision==0.18.1+cu118
+torchaudio==2.3.1+cu118
+--extra-index-url https://download.pytorch.org/whl/cu118
+
+# NLP / embeddings
+transformers
+sentence-transformers
+
+# LangChain ecosystem
+langchain
+langchain-community
+langchain-groq
+langchain-neo4j
+langgraph
+langchain-experimental
+langchain-huggingface
+langchain-core
+
+# Vector DB
+chromadb==0.5.11
+
+# Backend / API
+flask
+flask-cors
+python-dotenv
+
+# Utils
+tqdm
+pandas
+numpy

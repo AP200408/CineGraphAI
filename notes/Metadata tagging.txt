@@ -1,0 +1,79 @@
+Sources:
+https://www.komprise.com/glossary_terms/metadata-tagging/#:~:text=Metadata%20tagging%20is%20the%20process,%2C%20sections%20in%20a%20document.
+https://www.demoup-cliplister.com/en/blog/tagging-metadata-best-practices/#:~:text=or%20video%20files.-,What%20is%20Metadata%20Tagging?,search%20time%20and%20increases%20productivity.
+https://www.komprise.com/glossary_terms/metadatabase/
+
+
+Metadata tagging is the process of adding descriptive keywords, labels, or categories (tags) to digital files and assets to make them easier to organize, search, and manage.
+
+Uses:
+	1. quickly locate specific information within large collections of data, like images, videos, and documents.
+	2. improves efficiency by reducing search time
+	3. increasing productivity for managing digital content.
+	4. discoverability
+	5. aiding search engines and users in quickly locating media file
+
+Main Idea:
+1. Assigning descriptive information
+2. Structuring content
+3. Improving searchability
+
+
+Types of metadata tagging:
+	Structural Metadata
+		Defines the relationship between data elements.
+		Helps with the display and navigation of data, such as table of contents and page numbers.
+	Descriptive Metadata
+		Provides information for discovering and identifying resources.
+		Includes details like title, author, and keywords, following standards like Dublin Core.
+	Preservation Metadata
+		Involves documentation related to preserving resources.
+		Covers information on rights management and actions taken to maintain digital assets over time.
+	Administrative Metadata
+		Offers data useful for managing resources & technical characteristics.
+		Includes technical details on creation, rights, access controls, and preservation actions.
+	Provenance Metadata
+		Tracks the origin and history of a data resource.
+		Records ownership, changes, and usage, helping to trace the resource’s lifecycle.
+
+Implementation:
+	Flat Tagging: Assigns a simple list of tags to content.
+	Hierarchical Tagging: Uses a tree-like structure where tags are organized in categories and subcategories.
+	Facet Tagging: Allows content to be tagged across multiple dimensions (e.g., genre, location, date).
+
+Steps for Implementing Metadata Tagging:
+	1. Define a metadata schema to apply structure to your tagging process.
+	2. Choose appropriate tags that accurately describe your assets.
+	3. Train your team(agents?) on best practices to ensure consistency.
+	4. Regularly review and update tags to keep them relevant and useful.(agents)
+
+Metadata schema (Eg. Dublin Core Standard)
+
+Tools:
+	1. Digital Asset Management (DAM) Systems
+	2. Web services and tools
+	3. NLP
+	4. AI-powered tools like AWS Rekognition (for media), Tagtog (for text), and BrightEdge (for SEO).
+
+Common Challenges:
+	Inconsistent Tagging
+		Inconsistent tagging occurs when different team members use varied terms or formats. This inconsistency can lead to confusion, making it difficult to find or categorise assets.
+		Impact: It reduces the efficiency of asset retrieval and hampers effective search and organisation within the DAM system.
+	Data Redundancy
+		Data redundancy happens when the same metadata is repeated across multiple entries or assets. This duplication can clutter the system and lead to inaccurate search results.
+		Impact: It causes inefficiencies and can make asset management more cumbersome, as redundant data can lead to confusion and wasted storage space.
+
+Our metadata schema:
+1. Topics & Keywords: Extract key themes, subjects, and frequently mentioned terms. 
+2. Named Entities: Identify people, organizations, locations, products, etc. 
+3. Sentiment & Emotion: Analyze tone and emotional context of the conversation. 
+4. Speaker Identification: Tag who said what (if speaker labels are available). (use Graph database(neo4j)) 
+5. Time-Based Segmentation: Map metadata to timestamps for scene/segment-level tagging. 6. Content Classification: Categorize content (e.g., news, entertainment, education).
+
+We need to periodically audit and clean up metadata, addressing any inconsistencies or redundant data.
+
+Metadatabases: 
+	1. In unstructured data, a metadatabase is a virtual database of metadata (data about data) that provides additional structure and context to this data so that it is more usable and searchable for a variety of use cases.
+	2. It includes file names, file types, creation dates, tags, authors, sizes, formats, and locations.
+	3. Metadata is even more useful when enriched by analysis and tagging. For example, image files could be indexed based on facial or building recognition tags and text documents could be indexed based on keywords or sentiment.
+	4. Example:  Komprise Global File Index
